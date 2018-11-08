@@ -1,9 +1,13 @@
-<h1>MY FIRST PETITION </h1>
-<form method="POST">
+<h1>the good cause</h1>
+<form method="POST" id ="petitionbox">
   <input type="text" name="firstname" placeholder="enter your first name">
   <input type="text" name="lastname" placeholder="enter your last name">
   <input id="hiddenbox" type="hidden" name="signaturedata">
-<canvas id="signaturebox" width="300" height="300"></canvas>
+ <input type="hidden" name="_csrf" value="{{csrfToken}}">
+<canvas id="signaturebox"></canvas>
   <button type="submit" id="button">SIGN THE PETITION</button>
 </form>
+{{#if error}}
+  <div id="errorbox"><p>///ERROR/// NOT ENOUGH DATA ///ERROR///</p></div>
+{{/if}}
 </html>

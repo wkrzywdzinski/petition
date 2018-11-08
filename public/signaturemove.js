@@ -1,7 +1,7 @@
 var canvas = $("#signaturebox")
 var hiddenbox = $("#hiddenbox")
 var ctx = canvas[0].getContext("2d")
-ctx.strokeStyle = "white";
+ctx.strokeStyle = "blue";
 canvas.on("mousedown", function(e) {
   let x = e.offsetX
   let y = e.offsetY
