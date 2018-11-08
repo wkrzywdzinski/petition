@@ -1,0 +1,19 @@
+* {
+    margin: 0;
+    box-sizing: border-box;
+    background-color: green;
+}
+#signaturebox {
+  background-color: blue;
+}
+input {
+  width: 300px;
+  height: 100px;
+}
+h1 {
+  text-decoration: underline;
+}
+#button {
+  background: red;
+  border-radius: 50%
+}
