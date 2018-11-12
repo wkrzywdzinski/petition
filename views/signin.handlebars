@@ -1,0 +1,15 @@
+<h1>the good cause</h1>
+<h2>sign in </h2>
+<form method="POST" id ="petitionbox">
+  <input type="text" name="firstname" placeholder="enter your first name">
+  <input type="text" name="lastname" placeholder="enter your last name">
+  <input type="text" name="email" placeholder="enter email address">
+    <input type="password" name="password" placeholder="enter password">
+ <input type="hidden" name="_csrf" value="{{csrfToken}}">
+  <button type="submit" id="button">SIGN IN</button>
+</form>
+<a href="/login">OR LOGIN TO EXISTING ACCOUNT</a>
+{{#if error}}
+  <div id="errorbox"><p>///ERROR/// NOT ENOUGH DATA ///ERROR///</p></div>
+{{/if}}
+</html>
