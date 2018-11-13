@@ -50,7 +50,17 @@ h1 {
 #thanksbox {
   width: 100%;
   text-align: center;
-  height: 500px;
+  height: 300px;
   line-height: 500px;
   vertical-align: middle;
+}
+
+ #signatureshowbox {
+  margin-top: 100px;
+}
+
+img {
+    display: block;
+    margin-left: auto;
+    margin-right: auto;
 }

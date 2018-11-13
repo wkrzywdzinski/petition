@@ -1,0 +1,14 @@
+<h1>the good cause</h1>
+<h2>put more infos</h2>
+<form method="POST" id ="petitionbox">
+  <input type="text" name="age" placeholder="enter your age">
+  <input type="text" name="city" placeholder="enter your city">
+  <input type="text" name="url" placeholder="enter your url">
+ <input type="hidden" name="_csrf" value="{{csrfToken}}">
+  <button type="submit" id="button">send the data</button>
+</form>
+<a href="/sign">OR skip the step</a>
+{{#if error}}
+  <div id="errorbox"><p>///ERROR/// NOT ENOUGH DATA ///ERROR///</p></div>
+{{/if}}
+</html>
