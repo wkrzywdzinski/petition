@@ -1,11 +1,13 @@
 <h1>the good cause</h1>
 <h2>sign the petition</h2>
-<form method="POST" id ="petitionbox">
+<div id="petitionbox">
+<form method="POST">
   <input id="hiddenbox" type="hidden" name="signaturedata">
  <input type="hidden" name="_csrf" value="{{csrfToken}}">
 <canvas id="signaturebox"></canvas>
   <button type="submit" id="button">SIGN THE PETITION</button>
 </form>
+</div>
 {{#if error}}
   <div id="errorbox"><p>///ERROR/// NOT ENOUGH DATA ///ERROR///</p></div>
 {{/if}}
