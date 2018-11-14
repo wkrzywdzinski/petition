@@ -1,0 +1,18 @@
+<h1>the good cause</h1>
+<h2>edit your profile</h2>
+<form method="POST" id ="petitionbox">
+  <input type="text" name="firstname" placeholder="enter your first name" value={{info.name}}>
+  <input type="text" name="lastname" placeholder="enter your last name" value={{info.lastname}}>
+  <input type="text" name="email" placeholder="enter email address" value={{info.email}}>
+    <input type="password" name="password" placeholder="enter new password">
+    <input type="text" name="age" placeholder="enter your age" value={{info.age}}>
+    <input type="text" name="city" placeholder="enter your city" value={{info.city}}>
+    <input type="url" name="url" placeholder="enter your url with https://" value={{info.url}}>
+ <input type="hidden" name="_csrf" value="{{csrfToken}}">
+  <button type="submit" id="button">EDIT PROFILE</button>
+</form>
+
+{{#if error}}
+  <div id="errorbox"><p>///ERROR/// NOT ENOUGH DATA ///ERROR///</p></div>
+{{/if}}
+</html>

@@ -2,7 +2,10 @@ const spicedPg = require("spiced-pg");
 var bcrypt = require("bcryptjs");
 var bcrypt = require("bcryptjs");
 
-const db = spicedPg(`postgres:postgres:anneanneanne@localhost:5432/petition`);
+const db = spicedPg(
+  process.env.DATABASE_URL ||
+    `postgres:postgres:anneanneanne@localhost:5432/petition`
+);
 
 exports.createsignature = function(userID, signature) {
   return db.query(
@@ -36,6 +39,24 @@ exports.insertinfo = function(userID, age, city, url) {
     [userID || null, age || null, city || null, url || null]
   );
 };
+exports.updatefullinfo = function(age, city, url, userID) {
+  return db.query(
+    `INSERT INTO fullinfo (age, city, url, userID)
+       VALUES ($1, $2, $3, $4)
+       ON CONFLICT (userID)
+       DO UPDATE SET age = $1, city = $2, url = $3`,
+    [age || null, city || null, url || null, userID || null]
+  );
+};
+exports.updateusersdata = function(name, lastname, password, userID) {
+  return db.query(
+    `INSERT INTO usersdata (name, lastname, password, userID)
+       VALUES ($1, $2)
+       ON CONFLICT (userID)
+       DO UPDATE SET name = $1, lastname = $2, password = $3`,
+    [name || null, lastname || null, password || null, userID || null]
+  );
+};
 exports.getuser = email => {
   return db.query(
     `SELECT *
@@ -52,6 +73,30 @@ exports.getsigners = function() {
        ON usersdata.id = signatures.userID
        LEFT JOIN fullinfo
        ON fullinfo.userID = signatures.userID`
+  );
+};
+exports.getcity = function(city) {
+  return db.query(
+    `SELECT name, lastname, age, city, url
+       FROM signatures
+       LEFT JOIN usersdata
+       ON usersdata.id = signatures.userID
+       LEFT JOIN fullinfo
+       ON fullinfo.userID = signatures.userID
+       WHERE LOWER(city) = LOWER($1)`,
+    [city]
+  );
+};
+exports.editinfo = function(userID) {
+  return db.query(
+    `SELECT name, lastname, age, city, url, email
+       FROM signatures
+       LEFT JOIN usersdata
+       ON usersdata.id = signatures.userID
+       LEFT JOIN fullinfo
+       ON fullinfo.userID = signatures.userID
+       WHERE signatures.userID = $1`,
+    [userID]
   );
 };
 exports.checksignature = id => {

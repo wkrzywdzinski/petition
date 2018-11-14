@@ -88,6 +88,15 @@ app.get("/moreinfo", (req, res) => {
     });
   }
 });
+app.get("/edit", checkUser, (req, res) => {
+  db.editinfo(req.session.id).then(function(results) {
+    console.log(results);
+    res.render("edit", {
+      layout: "main",
+      info: results.rows[0]
+    });
+  });
+});
 app.get("/logout", (req, res) => {
   req.session = null;
   console.log(req.session);
@@ -96,6 +105,9 @@ app.get("/logout", (req, res) => {
   });
 });
 app.get("/signers", (req, res) => {
+  db.getcity("Berlin").then(function(cityres) {
+    console.log(cityres);
+  });
   db.getsigners().then(function(results) {
     res.render("signers", {
       layout: "main",
@@ -103,7 +115,14 @@ app.get("/signers", (req, res) => {
     });
   });
 });
-
+app.get("/signers/:city", (req, res) => {
+  db.getcity(req.params.city).then(function(results) {
+    res.render("signerscity", {
+      layout: "main",
+      list: results.rows
+    });
+  });
+});
 //////////////////// post route///////////////////
 
 app.post("/login", function(req, res) {
@@ -118,10 +137,8 @@ app.post("/login", function(req, res) {
             db.checksignature(req.session.id).then(function(results) {
               if (results.rows.length) {
                 req.session.signed = true;
-                console.log("yes");
                 res.redirect("/sign");
               } else {
-                console.log("no");
                 res.redirect("/sign");
               }
             });
@@ -194,10 +211,28 @@ app.post("/moreinfo", function(req, res) {
       });
     });
 });
+app.post("/edit", function(req, res) {
+  db.updatefullinfo(req.body.age, req.body.city, req.body.url, req.session.id)
+    .then(res.redirect("/signed"))
+    .catch(function(err) {
+      console.log(err);
+      res.render("edit", {
+        layout: "main",
+        error: err
+      });
+    });
+});
+
+function checkUser(req, res, next) {
+  if (!req.session.id) {
+    res.redirect("/signin");
+  } else {
+    next();
+  }
+}
 
 ////////////// server ///////////
 
-app.listen(8080, () => {
+app.listen(process.env.PORT || 8080, () => {
   console.log("listening 8080");
 });
-///////////// req.session = null;
