@@ -11,7 +11,7 @@ SELECT * FROM usersdata;
 DROP TABLE IF EXISTS signatures;
 CREATE TABLE signatures (
   id SERIAL PRIMARY KEY,
-  userID INTEGER NOT NULL UNIQUE,
+  userID INTEGER NOT NULL,
   signature TEXT
 );
 SELECT * FROM signatures;

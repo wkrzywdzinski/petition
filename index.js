@@ -211,8 +211,29 @@ app.post("/moreinfo", function(req, res) {
       });
     });
 });
+app.post("/signed", function(req, res) {
+  db.deletesignature(req.session.id)
+    .then((req.session.signed = false))
+    .then(res.redirect("/sign"))
+    .catch(function(err) {
+      console.log(err);
+      res.render("sign", {
+        layout: "main",
+        error: err
+      });
+    });
+});
 app.post("/edit", function(req, res) {
   db.updatefullinfo(req.body.age, req.body.city, req.body.url, req.session.id)
+    .then(
+      db.updateusersdata(
+        req.body.firstname,
+        req.body.lastname,
+        req.body.email,
+        req.body.password,
+        req.session.id
+      )
+    )
     .then(res.redirect("/signed"))
     .catch(function(err) {
       console.log(err);

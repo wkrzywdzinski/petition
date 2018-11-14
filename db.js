@@ -24,12 +24,21 @@ exports.getsignature = userID => {
   );
 };
 exports.createuser = function(name, lastname, email, password) {
-  return db.query(
-    `INSERT INTO usersdata (name, lastname, email, password)
+  if (password) {
+    return db.query(
+      `INSERT INTO usersdata (name, lastname, email, password)
         VALUES ($1, $2, $3, $4)
         RETURNING id`,
-    [name || null, lastname || null, email || null, password || null]
-  );
+      [name || null, lastname || null, email || null, password || null]
+    );
+  } else {
+    return db.query(
+      `INSERT INTO usersdata (name, lastname, email)
+          VALUES ($1, $2, $3)
+          RETURNING id`,
+      [name || null, lastname || null, email || null]
+    );
+  }
 };
 exports.insertinfo = function(userID, age, city, url) {
   return db.query(
@@ -48,13 +57,18 @@ exports.updatefullinfo = function(age, city, url, userID) {
     [age || null, city || null, url || null, userID || null]
   );
 };
-exports.updateusersdata = function(name, lastname, password, userID) {
+exports.updateusersdata = function(name, lastname, email, password, userID) {
   return db.query(
-    `INSERT INTO usersdata (name, lastname, password, userID)
-       VALUES ($1, $2)
-       ON CONFLICT (userID)
-       DO UPDATE SET name = $1, lastname = $2, password = $3`,
-    [name || null, lastname || null, password || null, userID || null]
+    `UPDATE usersdata
+    SET name = $1, lastname = $2, email = $3, password = $4
+    WHERE id = $5 `,
+    [
+      name || null,
+      lastname || null,
+      email || null,
+      password || null,
+      userID || null
+    ]
   );
 };
 exports.getuser = email => {
@@ -63,6 +77,13 @@ exports.getuser = email => {
         FROM usersdata
         WHERE email = $1`,
     [email]
+  );
+};
+exports.deletesignature = userID => {
+  return db.query(
+    `DELETE FROM signatures
+        WHERE userID = $1`,
+    [userID]
   );
 };
 exports.getsigners = function() {
