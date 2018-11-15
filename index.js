@@ -166,7 +166,7 @@ app.post("/signin", function(req, res) {
         password
       ).then(function(results) {
         req.session.id = results.rows[0].id;
-        console.log(req.session);
+        console.log(req.session.id);
         res.redirect("/moreinfo");
       });
     })
@@ -202,7 +202,9 @@ app.post("/sign", function(req, res) {
 });
 app.post("/moreinfo", function(req, res) {
   db.insertinfo(req.session.id, req.body.age, req.body.city, req.body.url)
-    .then(res.redirect("/sign"))
+    .then(function() {
+      res.redirect("/sign");
+    })
     .catch(function(err) {
       console.log(err);
       res.render("login", {
@@ -213,8 +215,12 @@ app.post("/moreinfo", function(req, res) {
 });
 app.post("/signed", function(req, res) {
   db.deletesignature(req.session.id)
-    .then((req.session.signed = false))
-    .then(res.redirect("/sign"))
+    .then(function() {
+      req.session.signed = false;
+    })
+    .then(function() {
+      res.redirect("/sign");
+    })
     .catch(function(err) {
       console.log(err);
       res.render("sign", {
