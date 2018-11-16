@@ -29,14 +29,14 @@ app.use(function(req, res, next) {
 //////////////////get route////////////
 
 app.get("/", (req, res) => {
-  res.redirect("/signin");
+  res.redirect("/register");
 });
 
-app.get("/signin", (req, res) => {
+app.get("/register", (req, res) => {
   if (req.session.id) {
     res.redirect("/sign");
   } else
-    res.render("signin", {
+    res.render("register", {
       layout: "main"
     });
 });
@@ -53,9 +53,9 @@ app.get("/login", (req, res) => {
 
 app.get("/sign", (req, res) => {
   if (req.session.signed) {
-    res.redirect("/signed");
+    res.redirect("/thanks");
   } else if (!req.session.id) {
-    res.redirect("/signin");
+    res.redirect("/register");
   } else {
     res.render("sign", {
       layout: "main"
@@ -63,14 +63,13 @@ app.get("/sign", (req, res) => {
   }
 });
 
-app.get("/signed", (req, res) => {
+app.get("/thanks", (req, res) => {
   if (!req.session.id) {
-    res.redirect("/signin");
+    res.redirect("/register");
   } else if (req.session.signed) {
     db.getsignature(req.session.id).then(function(results) {
       req.session.signed = true;
-      console.log(results);
-      res.render("signed", {
+      res.render("thanks", {
         layout: "main",
         signature: results.rows[0].signature
       });
@@ -81,7 +80,7 @@ app.get("/signed", (req, res) => {
 });
 app.get("/moreinfo", (req, res) => {
   if (!req.session.id) {
-    res.redirect("/signin");
+    res.redirect("/register");
   } else {
     res.render("moreinfo", {
       layout: "main"
@@ -90,7 +89,6 @@ app.get("/moreinfo", (req, res) => {
 });
 app.get("/edit", checkUser, (req, res) => {
   db.editinfo(req.session.id).then(function(results) {
-    console.log(results);
     res.render("edit", {
       layout: "main",
       info: results.rows[0]
@@ -99,15 +97,12 @@ app.get("/edit", checkUser, (req, res) => {
 });
 app.get("/logout", (req, res) => {
   req.session = null;
-  console.log(req.session);
   res.render("logout", {
     layout: "main"
   });
 });
 app.get("/signers", (req, res) => {
-  db.getcity("Berlin").then(function(cityres) {
-    console.log(cityres);
-  });
+  db.getcity("Berlin").then(function(cityres) {});
   db.getsigners().then(function(results) {
     res.render("signers", {
       layout: "main",
@@ -123,6 +118,9 @@ app.get("/signers/:city", (req, res) => {
     });
   });
 });
+app.get("*", function(req, res) {
+  res.redirect("/");
+});
 //////////////////// post route///////////////////
 
 app.post("/login", function(req, res) {
@@ -133,7 +131,6 @@ app.post("/login", function(req, res) {
         .then(function(check) {
           if (check) {
             req.session.id = results.rows[0].id;
-            console.log(req.session);
             db.checksignature(req.session.id).then(function(results) {
               if (results.rows.length) {
                 req.session.signed = true;
@@ -156,7 +153,7 @@ app.post("/login", function(req, res) {
     });
 });
 
-app.post("/signin", function(req, res) {
+app.post("/register", function(req, res) {
   db.hashPassword(req.body.password)
     .then(function(password) {
       db.createuser(
@@ -164,15 +161,22 @@ app.post("/signin", function(req, res) {
         req.body.lastname,
         req.body.email,
         password
-      ).then(function(results) {
-        req.session.id = results.rows[0].id;
-        console.log(req.session.id);
-        res.redirect("/moreinfo");
-      });
+      )
+        .then(function(results) {
+          req.session.id = results.rows[0].id;
+          res.redirect("/moreinfo");
+        })
+        .catch(function(err) {
+          console.log(err);
+          res.render("register", {
+            layout: "main",
+            error: err
+          });
+        });
     })
     .catch(function(err) {
       console.log(err);
-      res.render("signin", {
+      res.render("register", {
         layout: "main",
         error: err
       });
@@ -186,11 +190,7 @@ app.post("/sign", function(req, res) {
     })
     .then(function(results) {
       req.session.signed = true;
-      console.log(results);
-      res.render("signed", {
-        layout: "main",
-        signature: results.rows[0].signature
-      });
+      res.redirect("/thanks");
     })
     .catch(function(err) {
       console.log(err);
@@ -213,9 +213,10 @@ app.post("/moreinfo", function(req, res) {
       });
     });
 });
-app.post("/signed", function(req, res) {
+app.post("/signaturedelete", function(req, res) {
   db.deletesignature(req.session.id)
     .then(function() {
+      console.log("deleted");
       req.session.signed = false;
     })
     .then(function() {
@@ -230,17 +231,27 @@ app.post("/signed", function(req, res) {
     });
 });
 app.post("/edit", function(req, res) {
-  db.updatefullinfo(req.body.age, req.body.city, req.body.url, req.session.id)
-    .then(
+  if (req.body.password) {
+    db.hashPassword(req.body.password).then(function(password) {
       db.updateusersdata(
         req.body.firstname,
         req.body.lastname,
         req.body.email,
-        req.body.password,
+        password,
         req.session.id
-      )
-    )
-    .then(res.redirect("/signed"))
+      );
+    });
+  } else {
+    db.updateusersdata(
+      req.body.firstname,
+      req.body.lastname,
+      req.body.email,
+      req.body.password,
+      req.session.id
+    );
+  }
+  db.updatefullinfo(req.body.age, req.body.city, req.body.url, req.session.id)
+    .then(res.redirect("/thanks"))
     .catch(function(err) {
       console.log(err);
       res.render("edit", {
@@ -252,7 +263,7 @@ app.post("/edit", function(req, res) {
 
 function checkUser(req, res, next) {
   if (!req.session.id) {
-    res.redirect("/signin");
+    res.redirect("/register");
   } else {
     next();
   }

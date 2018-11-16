@@ -4,9 +4,10 @@
   <input type="text" name="email" placeholder="enter email address">
     <input type="password" name="password" placeholder="enter password">
  <input type="hidden" name="_csrf" value="{{csrfToken}}">
-  <button type="submit" id="button">LOG IN</button>
+  <button type="submit" class="button">LOG IN</button>
 </form>
+<a href="/register">or register</a>
 {{#if error}}
-  <div id="errorbox"><p>///ERROR/// WRONG EMAIL  OR PASSWORD ///ERROR///</p></div>
+  <div id="errorbox"><p>WRONG EMAIL  OR PASSWORD</p></div>
 {{/if}}
 </html>

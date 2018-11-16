@@ -1,10 +1,15 @@
 <div id="thanksbox"><h1> THANKS FOR SIGNING! </h1></div>
-<ul>
 {{#each list}}
-<li>
-{{#if url}}<a href={{url}}>{{/if}}{{name}} {{lastname}}{{#if url}}</a>{{/if}}
-{{#if age}}{{age}}{{/if}}
+<div class="entry">
+{{#if url}}
+<a href={{url}}>{{name}} {{lastname}}</a>
+{{else}}
+<p>{{name}} {{lastname}} (someone has no webpage!)</p>
+{{/if}}
+</div>
+{{#if age}}<h3>(age: {{age}})</h3>{{/if}}
 {{#if city}}<a href=signers/{{city}}>{{city}}</a>{{/if}}
-</li>
+<hr>
 {{/each}}
-</ul>
+<hr>
+<a href="/signed">go back</a>

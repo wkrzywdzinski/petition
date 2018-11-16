@@ -58,18 +58,27 @@ exports.updatefullinfo = function(age, city, url, userID) {
   );
 };
 exports.updateusersdata = function(name, lastname, email, password, userID) {
-  return db.query(
-    `UPDATE usersdata
+  if (password) {
+    return db.query(
+      `UPDATE usersdata
     SET name = $1, lastname = $2, email = $3, password = $4
     WHERE id = $5 `,
-    [
-      name || null,
-      lastname || null,
-      email || null,
-      password || null,
-      userID || null
-    ]
-  );
+      [
+        name || null,
+        lastname || null,
+        email || null,
+        password || null,
+        userID || null
+      ]
+    );
+  } else {
+    return db.query(
+      `UPDATE usersdata
+      SET name = $1, lastname = $2, email = $3
+      WHERE id = $4 `,
+      [name || null, lastname || null, email || null, userID || null]
+    );
+  }
 };
 exports.getuser = email => {
   return db.query(
@@ -140,7 +149,6 @@ exports.hashPassword = function(plainTextPassword) {
           return reject(err);
         }
         resolve(hash);
-        console.log(hash);
       });
     });
   });
