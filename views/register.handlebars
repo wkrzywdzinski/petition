@@ -1,5 +1,8 @@
-<h1>let's legalize medical catnip!</h1>
+<h1 id="title">let's legalize medical catnip!</h1>
 <h2>register</h2>
+<div id="cover">
+  <img src="catnip.jpg" alt="" id="catnip">
+</div>
 <div id ="petitionbox">
 <form method="POST">
   <input type="text" name="firstname" placeholder="enter your first name">
@@ -7,11 +10,14 @@
   <input type="text" name="email" placeholder="enter email address">
     <input type="password" name="password" placeholder="enter password">
  <input type="hidden" name="_csrf" value="{{csrfToken}}">
-  <button type="submit" class="button">REGISTER</button>
+  <button type="submit" class="button">REGISTER
+  </button>
 </form>
 <a href="/login">OR LOGIN TO EXISTING ACCOUNT</a>
 </div>
 {{#if error}}
   <div id="errorbox"><p>CORRECT YOUR DATA.</p></div>
 {{/if}}
+<script src="https://code.jquery.com/jquery-3.3.1.min.js"></script>
+<script src="script.js" charset="utf-8"></script>
 </html>

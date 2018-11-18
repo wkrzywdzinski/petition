@@ -20,6 +20,7 @@
   width: 600px;
 }
 input {
+  transition: 1s;
   border: 0;
   width: 600px;
   height: 120px;
@@ -30,14 +31,18 @@ input {
   margin: 10px;
   font-size: 40px;
   display: block;
+  opacity: 0.9;
 }
-input:focus {
+/* input:focus {
   background-color: Khaki;
-}
+} */
 ::placeholder {
   color: white;
   font-weight: bold;
   font-size: 40px;
+}
+.selected::-webkit-input-placeholder {
+  color: black;
 }
 h1 {
   font-size: 100px;
@@ -60,10 +65,18 @@ h2 {
   font-size: 40px;
 }
 .button:hover {
+  transition: 1s;
   background: Khaki;
+  font-size: 50px;
 }
 a:hover {
+  transition: 1s;
   color: Khaki;
+  font-size: 60px;
+}
+#signaturebox:hover {
+  transition: 1s;
+  background-color: khaki;
 }
 #deletebutton {
   border: 0.5px solid white;
@@ -76,6 +89,7 @@ a:hover {
   margin-left: 50px;
 }
 #deletebutton:hover {
+  transition: 1s;
   background: Khaki;
 }
 #errorbox {
@@ -116,4 +130,37 @@ p {
 .editbox {
   height: 60px;
   font-size: 30px;
+}
+.selected {
+  transition: 1s;
+  height: 140px;
+  background-color: Khaki;
+  color: black;
+  border: 1px black solid;
+}
+nav {
+  display: flex;
+  position: absolute;
+  margin-top: 20px;
+  margin-left: 20px;
+  border-right: 5px black dashed;
+  height: 100%;
+  width: 5%;
+  display: flex;
+  vertical-align: middle;
+}
+#cover {
+  width: 100%;
+  height: 100%;
+  position: fixed;
+  top: 0;
+  background-color: rgba(0, 0, 0, 0.8);
+  z-index: 1000;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+}
+#cover img {
+  height: 90%;
+  opacity: 0.9;
 }
