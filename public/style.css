@@ -1,9 +1,12 @@
 * {
   margin: 0;
   box-sizing: border-box;
-  background-color: #8fad88;
+  /* background-color: #8fad88; */
   font-family: "Amatic SC", cursive;
   text-align: center;
+}
+body {
+  background-color: #8fad88;
 }
 #petitionbox {
   width: 100%;
@@ -132,35 +135,9 @@ p {
   font-size: 30px;
 }
 .selected {
-  transition: 1s;
+  transition: 2s;
   height: 140px;
   background-color: Khaki;
   color: black;
   border: 1px black solid;
-}
-nav {
-  display: flex;
-  position: absolute;
-  margin-top: 20px;
-  margin-left: 20px;
-  border-right: 5px black dashed;
-  height: 100%;
-  width: 5%;
-  display: flex;
-  vertical-align: middle;
-}
-#cover {
-  width: 100%;
-  height: 100%;
-  position: fixed;
-  top: 0;
-  background-color: rgba(0, 0, 0, 0.8);
-  z-index: 1000;
-  display: flex;
-  align-items: center;
-  justify-content: center;
-}
-#cover img {
-  height: 90%;
-  opacity: 0.9;
 }
