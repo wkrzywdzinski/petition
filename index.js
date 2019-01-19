@@ -9,24 +9,30 @@ app.engine("handlebars", hb());
 app.set("view engine", "handlebars");
 
 /////////////////////////middleware///////////////////
+
 app.use(
   cookieSession({
     secret: `you dont wanna know.`,
     maxAge: 1000 * 60 * 60 * 24 * 14
   })
 );
+
 app.use(express.static("./public"));
+
 app.use(
   require("body-parser").urlencoded({
     extended: false
   })
 );
+
 app.use(csurf());
+
 app.use(function(req, res, next) {
   res.locals.csrfToken = req.csrfToken();
   next();
 });
-//////////////////get route////////////
+
+//////////////////main////////////
 
 app.get("/", (req, res) => {
   res.redirect("/register");
@@ -63,10 +69,8 @@ app.get("/sign", (req, res) => {
   }
 });
 
-app.get("/thanks", (req, res) => {
-  if (!req.session.id) {
-    res.redirect("/register");
-  } else if (req.session.signed) {
+app.get("/thanks", checkUser, (req, res) => {
+  if (req.session.signed) {
     db.getsignature(req.session.id).then(function(results) {
       req.session.signed = true;
       res.render("thanks", {
@@ -78,15 +82,13 @@ app.get("/thanks", (req, res) => {
     res.redirect("sign");
   }
 });
-app.get("/moreinfo", (req, res) => {
-  if (!req.session.id) {
-    res.redirect("/register");
-  } else {
-    res.render("moreinfo", {
-      layout: "main"
-    });
-  }
+
+app.get("/moreinfo", checkUser, (req, res) => {
+  res.render("moreinfo", {
+    layout: "main"
+  });
 });
+
 app.get("/edit", checkUser, (req, res) => {
   db.editinfo(req.session.id).then(function(results) {
     res.render("edit", {
@@ -95,14 +97,15 @@ app.get("/edit", checkUser, (req, res) => {
     });
   });
 });
+
 app.get("/logout", (req, res) => {
   req.session = null;
   res.render("logout", {
     layout: "main"
   });
 });
+
 app.get("/signers", (req, res) => {
-  db.getcity("Berlin").then(function(cityres) {});
   db.getsigners().then(function(results) {
     res.render("signers", {
       layout: "main",
@@ -110,6 +113,7 @@ app.get("/signers", (req, res) => {
     });
   });
 });
+
 app.get("/signers/:city", (req, res) => {
   db.getcity(req.params.city).then(function(results) {
     res.render("signerscity", {
@@ -118,10 +122,12 @@ app.get("/signers/:city", (req, res) => {
     });
   });
 });
+
 app.get("*", function(req, res) {
   res.redirect("/");
 });
-//////////////////// post route///////////////////
+
+//////////////////// post routes ///////////////////
 
 app.post("/login", function(req, res) {
   db.getuser(req.body.email)
@@ -200,19 +206,20 @@ app.post("/sign", function(req, res) {
       });
     });
 });
+
 app.post("/moreinfo", function(req, res) {
   db.insertinfo(req.session.id, req.body.age, req.body.city, req.body.url)
     .then(function() {
       res.redirect("/sign");
     })
     .catch(function(err) {
-      console.log(err);
       res.render("login", {
         layout: "main",
         error: err
       });
     });
 });
+
 app.post("/signaturedelete", function(req, res) {
   db.deletesignature(req.session.id)
     .then(function() {
@@ -230,6 +237,7 @@ app.post("/signaturedelete", function(req, res) {
       });
     });
 });
+
 app.post("/edit", function(req, res) {
   if (req.body.password) {
     db.hashPassword(req.body.password).then(function(password) {
@@ -250,10 +258,10 @@ app.post("/edit", function(req, res) {
       req.session.id
     );
   }
+
   db.updatefullinfo(req.body.age, req.body.city, req.body.url, req.session.id)
     .then(res.redirect("/thanks"))
     .catch(function(err) {
-      console.log(err);
       res.render("edit", {
         layout: "main",
         error: err
