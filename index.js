@@ -32,6 +32,15 @@ app.use(function(req, res, next) {
   next();
 });
 
+// check for login //
+function checkUser(req, res, next) {
+  if (!req.session.id) {
+    res.redirect("/register");
+  } else {
+    next();
+  }
+}
+
 //////////////////main////////////
 
 app.get("/", (req, res) => {
@@ -268,14 +277,6 @@ app.post("/edit", function(req, res) {
       });
     });
 });
-
-function checkUser(req, res, next) {
-  if (!req.session.id) {
-    res.redirect("/register");
-  } else {
-    next();
-  }
-}
 
 ////////////// server ///////////
 
