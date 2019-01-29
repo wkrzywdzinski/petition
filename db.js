@@ -1,28 +1,14 @@
 const spicedPg = require("spiced-pg");
 var bcrypt = require("bcryptjs");
 var bcrypt = require("bcryptjs");
-
 const db = spicedPg(
   process.env.DATABASE_URL ||
     `postgres:postgres:anneanneanne@localhost:5432/petition`
 );
 
-exports.createSignature = function(userID, signature) {
-  return db.query(
-    `INSERT INTO signatures (userID, signature)
-        VALUES ($1, $2)
-        RETURNING id`,
-    [userID || null, signature || null]
-  );
-};
-exports.getSignature = userID => {
-  return db.query(
-    `SELECT signature
-        FROM signatures
-        WHERE userID = $1`,
-    [userID]
-  );
-};
+///////////////////// MAIN PART /////////////////
+
+/// REGISTER - creates user ///
 exports.createUser = function(name, lastname, email, password) {
   if (password) {
     return db.query(
@@ -40,6 +26,93 @@ exports.createUser = function(name, lastname, email, password) {
     );
   }
 };
+
+/// REGISTER - hashes password ///
+exports.hashPassword = function(plainTextPassword) {
+  return new Promise(function(resolve, reject) {
+    bcrypt.genSalt(function(err, salt) {
+      if (err) {
+        return reject(err);
+      }
+      bcrypt.hash(plainTextPassword, salt, function(err, hash) {
+        if (err) {
+          return reject(err);
+        }
+        resolve(hash);
+      });
+    });
+  });
+};
+
+/// LOGIN - checks for user ///
+exports.getUser = email => {
+  return db.query(
+    `SELECT *
+        FROM usersdata
+        WHERE email = $1`,
+    [email]
+  );
+};
+
+/// LOGIN - checks password ///
+exports.checkPassword = function(
+  textEnteredInLoginForm,
+  hashedPasswordFromDatabase
+) {
+  return new Promise(function(resolve, reject) {
+    bcrypt.compare(textEnteredInLoginForm, hashedPasswordFromDatabase, function(
+      err,
+      doesMatch
+    ) {
+      if (err) {
+        reject(err);
+      } else {
+        resolve(doesMatch);
+      }
+    });
+  });
+};
+
+/// LOGIN - checks if user signed petition ///
+exports.checkSignature = id => {
+  return db.query(
+    `SELECT *
+        FROM signatures
+        WHERE userID = $1`,
+    [id]
+  );
+};
+
+/// INSERTS users signature ///
+exports.createSignature = function(userID, signature) {
+  return db.query(
+    `INSERT INTO signatures (userID, signature)
+        VALUES ($1, $2)
+        RETURNING id`,
+    [userID || null, signature || null]
+  );
+};
+
+/// DELETE users signature ///
+exports.deleteSignature = userID => {
+  return db.query(
+    `DELETE FROM signatures
+        WHERE userID = $1`,
+    [userID]
+  );
+};
+
+/// GETS users signature for the thankyou page after petition was signed ///
+exports.getSignature = userID => {
+  return db.query(
+    `SELECT signature
+        FROM signatures
+        WHERE userID = $1`,
+    [userID]
+  );
+};
+
+/// INSERTS additional user info (age,city, url) ///
 exports.insertInfo = function(userID, age, city, url) {
   return db.query(
     `INSERT INTO fullinfo (userID, age, city, url)
@@ -48,21 +121,25 @@ exports.insertInfo = function(userID, age, city, url) {
     [userID || null, age || null, city || null, url || null]
   );
 };
+
+/// UPDATES additional user info (age,city, url) ///
 exports.updateFullInfo = function(age, city, url, userID) {
   return db.query(
     `INSERT INTO fullinfo (age, city, url, userID)
-       VALUES ($1, $2, $3, $4)
-       ON CONFLICT (userID)
-       DO UPDATE SET age = $1, city = $2, url = $3`,
+    VALUES ($1, $2, $3, $4)
+    ON CONFLICT (userID)
+    DO UPDATE SET age = $1, city = $2, url = $3`,
     [age || null, city || null, url || null, userID || null]
   );
 };
-exports.updateUsersData = function(name, lastname, email, password, userID) {
+
+/// UPDATES basic user info(name,lastname, email) with or without password ///
+exports.updateUsersdata = function(name, lastname, email, password, userID) {
   if (password) {
     return db.query(
       `UPDATE usersdata
-    SET name = $1, lastname = $2, email = $3, password = $4
-    WHERE id = $5 `,
+      SET name = $1, lastname = $2, email = $3, password = $4
+      WHERE id = $5 `,
       [
         name || null,
         lastname || null,
@@ -80,43 +157,8 @@ exports.updateUsersData = function(name, lastname, email, password, userID) {
     );
   }
 };
-exports.getUser = email => {
-  return db.query(
-    `SELECT *
-        FROM usersdata
-        WHERE email = $1`,
-    [email]
-  );
-};
-exports.deleteSignature = userID => {
-  return db.query(
-    `DELETE FROM signatures
-        WHERE userID = $1`,
-    [userID]
-  );
-};
-exports.getSigners = function() {
-  return db.query(
-    `SELECT name, lastname, age, city, url
-       FROM signatures
-       LEFT JOIN usersdata
-       ON usersdata.id = signatures.userID
-       LEFT JOIN fullinfo
-       ON fullinfo.userID = signatures.userID`
-  );
-};
-exports.getCity = function(city) {
-  return db.query(
-    `SELECT name, lastname, age, city, url
-       FROM signatures
-       LEFT JOIN usersdata
-       ON usersdata.id = signatures.userID
-       LEFT JOIN fullinfo
-       ON fullinfo.userID = signatures.userID
-       WHERE LOWER(city) = LOWER($1)`,
-    [city]
-  );
-};
+
+/// GETS the current user info for the 'edit' route ///
 exports.editInfo = function(userID) {
   return db.query(
     `SELECT name, lastname, age, city, url, email
@@ -129,45 +171,29 @@ exports.editInfo = function(userID) {
     [userID]
   );
 };
-exports.checkSignature = id => {
+
+/// GETS list of users who signed petition ///
+exports.getSigners = function() {
   return db.query(
-    `SELECT *
-        FROM signatures
-        WHERE userID = $1`,
-    [id]
+    `SELECT name, lastname, age, city, url
+       FROM signatures
+       LEFT JOIN usersdata
+       ON usersdata.id = signatures.userID
+       LEFT JOIN fullinfo
+       ON fullinfo.userID = signatures.userID`
   );
 };
 
-exports.hashPassword = function(plainTextPassword) {
-  return new Promise(function(resolve, reject) {
-    bcrypt.genSalt(function(err, salt) {
-      if (err) {
-        return reject(err);
-      }
-      bcrypt.hash(plainTextPassword, salt, function(err, hash) {
-        if (err) {
-          return reject(err);
-        }
-        resolve(hash);
-      });
-    });
-  });
-};
-
-exports.checkPassword = function(
-  textEnteredInLoginForm,
-  hashedPasswordFromDatabase
-) {
-  return new Promise(function(resolve, reject) {
-    bcrypt.compare(textEnteredInLoginForm, hashedPasswordFromDatabase, function(
-      err,
-      doesMatch
-    ) {
-      if (err) {
-        reject(err);
-      } else {
-        resolve(doesMatch);
-      }
-    });
-  });
+/// GETS list of users who signed petition BY CITY ///
+exports.getCity = function(city) {
+  return db.query(
+    `SELECT name, lastname, age, city, url
+       FROM signatures
+       LEFT JOIN usersdata
+       ON usersdata.id = signatures.userID
+       LEFT JOIN fullinfo
+       ON fullinfo.userID = signatures.userID
+       WHERE LOWER(city) = LOWER($1)`,
+    [city]
+  );
 };
