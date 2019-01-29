@@ -208,7 +208,7 @@ app.post("/login", function(req, res) {
     });
 });
 
-/// post route for signing petition, CREATES signature ///
+/// CREATES signature ///
 app.post("/sign", function(req, res) {
   db.createSignature(req.session.id, req.body.signaturedata)
     .then(function(results) {

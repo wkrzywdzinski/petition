@@ -93,7 +93,7 @@ exports.createSignature = function(userID, signature) {
   );
 };
 
-/// DELETE users signature ///
+/// DELETES users signature ///
 exports.deleteSignature = userID => {
   return db.query(
     `DELETE FROM signatures
@@ -119,6 +119,20 @@ exports.insertInfo = function(userID, age, city, url) {
         VALUES ($1, $2, $3, $4)
         RETURNING id`,
     [userID || null, age || null, city || null, url || null]
+  );
+};
+
+/// GETS the current user info for the 'edit' route ///
+exports.editInfo = function(userID) {
+  return db.query(
+    `SELECT name, lastname, age, city, url, email
+       FROM signatures
+       LEFT JOIN usersdata
+       ON usersdata.id = signatures.userID
+       LEFT JOIN fullinfo
+       ON fullinfo.userID = signatures.userID
+       WHERE signatures.userID = $1`,
+    [userID]
   );
 };
 
@@ -156,20 +170,6 @@ exports.updateUsersdata = function(name, lastname, email, password, userID) {
       [name || null, lastname || null, email || null, userID || null]
     );
   }
-};
-
-/// GETS the current user info for the 'edit' route ///
-exports.editInfo = function(userID) {
-  return db.query(
-    `SELECT name, lastname, age, city, url, email
-       FROM signatures
-       LEFT JOIN usersdata
-       ON usersdata.id = signatures.userID
-       LEFT JOIN fullinfo
-       ON fullinfo.userID = signatures.userID
-       WHERE signatures.userID = $1`,
-    [userID]
-  );
 };
 
 /// GETS list of users who signed petition ///
