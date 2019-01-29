@@ -7,7 +7,7 @@ const db = spicedPg(
     `postgres:postgres:anneanneanne@localhost:5432/petition`
 );
 
-exports.createsignature = function(userID, signature) {
+exports.createSignature = function(userID, signature) {
   return db.query(
     `INSERT INTO signatures (userID, signature)
         VALUES ($1, $2)
@@ -15,7 +15,7 @@ exports.createsignature = function(userID, signature) {
     [userID || null, signature || null]
   );
 };
-exports.getsignature = userID => {
+exports.getSignature = userID => {
   return db.query(
     `SELECT signature
         FROM signatures
@@ -23,7 +23,7 @@ exports.getsignature = userID => {
     [userID]
   );
 };
-exports.createuser = function(name, lastname, email, password) {
+exports.createUser = function(name, lastname, email, password) {
   if (password) {
     return db.query(
       `INSERT INTO usersdata (name, lastname, email, password)
@@ -40,7 +40,7 @@ exports.createuser = function(name, lastname, email, password) {
     );
   }
 };
-exports.insertinfo = function(userID, age, city, url) {
+exports.insertInfo = function(userID, age, city, url) {
   return db.query(
     `INSERT INTO fullinfo (userID, age, city, url)
         VALUES ($1, $2, $3, $4)
@@ -48,7 +48,7 @@ exports.insertinfo = function(userID, age, city, url) {
     [userID || null, age || null, city || null, url || null]
   );
 };
-exports.updatefullinfo = function(age, city, url, userID) {
+exports.updateFullInfo = function(age, city, url, userID) {
   return db.query(
     `INSERT INTO fullinfo (age, city, url, userID)
        VALUES ($1, $2, $3, $4)
@@ -57,7 +57,7 @@ exports.updatefullinfo = function(age, city, url, userID) {
     [age || null, city || null, url || null, userID || null]
   );
 };
-exports.updateusersdata = function(name, lastname, email, password, userID) {
+exports.updateUsersData = function(name, lastname, email, password, userID) {
   if (password) {
     return db.query(
       `UPDATE usersdata
@@ -80,7 +80,7 @@ exports.updateusersdata = function(name, lastname, email, password, userID) {
     );
   }
 };
-exports.getuser = email => {
+exports.getUser = email => {
   return db.query(
     `SELECT *
         FROM usersdata
@@ -88,14 +88,14 @@ exports.getuser = email => {
     [email]
   );
 };
-exports.deletesignature = userID => {
+exports.deleteSignature = userID => {
   return db.query(
     `DELETE FROM signatures
         WHERE userID = $1`,
     [userID]
   );
 };
-exports.getsigners = function() {
+exports.getSigners = function() {
   return db.query(
     `SELECT name, lastname, age, city, url
        FROM signatures
@@ -105,7 +105,7 @@ exports.getsigners = function() {
        ON fullinfo.userID = signatures.userID`
   );
 };
-exports.getcity = function(city) {
+exports.getCity = function(city) {
   return db.query(
     `SELECT name, lastname, age, city, url
        FROM signatures
@@ -117,7 +117,7 @@ exports.getcity = function(city) {
     [city]
   );
 };
-exports.editinfo = function(userID) {
+exports.editInfo = function(userID) {
   return db.query(
     `SELECT name, lastname, age, city, url, email
        FROM signatures
@@ -129,7 +129,7 @@ exports.editinfo = function(userID) {
     [userID]
   );
 };
-exports.checksignature = id => {
+exports.checkSignature = id => {
   return db.query(
     `SELECT *
         FROM signatures

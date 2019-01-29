@@ -8,7 +8,7 @@ const db = require("./db");
 app.engine("handlebars", hb());
 app.set("view engine", "handlebars");
 
-/////////////////////////middleware///////////////////
+////////////middleware////////////
 
 app.use(
   cookieSession({
@@ -32,7 +32,8 @@ app.use(function(req, res, next) {
   next();
 });
 
-// check for login //
+////////////check if user is logged in////////////
+
 function checkUser(req, res, next) {
   if (!req.session.id) {
     res.redirect("/register");
@@ -41,12 +42,13 @@ function checkUser(req, res, next) {
   }
 }
 
-//////////////////main////////////
+////////////GET requests////////////
 
 app.get("/", (req, res) => {
   res.redirect("/register");
 });
 
+//register route//
 app.get("/register", (req, res) => {
   if (req.session.id) {
     res.redirect("/sign");
@@ -56,6 +58,7 @@ app.get("/register", (req, res) => {
     });
 });
 
+//login route//
 app.get("/login", (req, res) => {
   if (req.session.id) {
     res.redirect("/sign");
@@ -66,11 +69,10 @@ app.get("/login", (req, res) => {
   }
 });
 
-app.get("/sign", (req, res) => {
+//sign petition route//
+app.get("/sign", checkUser, (req, res) => {
   if (req.session.signed) {
     res.redirect("/thanks");
-  } else if (!req.session.id) {
-    res.redirect("/register");
   } else {
     res.render("sign", {
       layout: "main"
@@ -78,28 +80,31 @@ app.get("/sign", (req, res) => {
   }
 });
 
+//after petition signed route, shows signature//
 app.get("/thanks", checkUser, (req, res) => {
   if (req.session.signed) {
-    db.getsignature(req.session.id).then(function(results) {
+    db.getSignature(req.session.id).then(function(results) {
       req.session.signed = true;
       res.render("thanks", {
         layout: "main",
         signature: results.rows[0].signature
       });
     });
-  } else if (req.session.id) {
+  } else {
     res.redirect("sign");
   }
 });
 
+//allows user to add personal information//
 app.get("/moreinfo", checkUser, (req, res) => {
   res.render("moreinfo", {
     layout: "main"
   });
 });
 
+// allows user to edit all the profile data //
 app.get("/edit", checkUser, (req, res) => {
-  db.editinfo(req.session.id).then(function(results) {
+  db.editInfo(req.session.id).then(function(results) {
     res.render("edit", {
       layout: "main",
       info: results.rows[0]
@@ -107,24 +112,18 @@ app.get("/edit", checkUser, (req, res) => {
   });
 });
 
-app.get("/logout", (req, res) => {
-  req.session = null;
-  res.render("logout", {
-    layout: "main"
-  });
-});
-
+// gets a list of the users who signed the petition //
 app.get("/signers", (req, res) => {
-  db.getsigners().then(function(results) {
+  db.getSigners().then(function(results) {
     res.render("signers", {
       layout: "main",
       list: results.rows
     });
   });
 });
-
+// gets a list of the users who signed the petition by city //
 app.get("/signers/:city", (req, res) => {
-  db.getcity(req.params.city).then(function(results) {
+  db.getCity(req.params.city).then(function(results) {
     res.render("signerscity", {
       layout: "main",
       list: results.rows
@@ -132,14 +131,54 @@ app.get("/signers/:city", (req, res) => {
   });
 });
 
+// logout route //
+app.get("/logout", (req, res) => {
+  req.session = null;
+  res.render("logout", {
+    layout: "main"
+  });
+});
+
 app.get("*", function(req, res) {
   res.redirect("/");
 });
 
-//////////////////// post routes ///////////////////
+//////////////////// POST routes ///////////////////
 
+//register route hashes the password, make in database entry//
+app.post("/register", function(req, res) {
+  db.hashPassword(req.body.password)
+    .then(function(password) {
+      db.createUser(
+        req.body.firstname,
+        req.body.lastname,
+        req.body.email,
+        password
+      )
+        .then(function(results) {
+          req.session.id = results.rows[0].id;
+          res.redirect("/moreinfo");
+        })
+        .catch(function(err) {
+          console.log(err);
+          res.render("register", {
+            layout: "main",
+            error: err
+          });
+        });
+    })
+    .catch(function(err) {
+      console.log(err);
+      res.render("register", {
+        layout: "main",
+        error: err
+      });
+    });
+});
+
+// login route, checks if user exists and if password is correct //
 app.post("/login", function(req, res) {
-  db.getuser(req.body.email)
+  db.getUser(req.body.email)
     .then(function(results) {
       return db
         .checkPassword(req.body.password, results.rows[0].password)
@@ -168,40 +207,11 @@ app.post("/login", function(req, res) {
     });
 });
 
-app.post("/register", function(req, res) {
-  db.hashPassword(req.body.password)
-    .then(function(password) {
-      db.createuser(
-        req.body.firstname,
-        req.body.lastname,
-        req.body.email,
-        password
-      )
-        .then(function(results) {
-          req.session.id = results.rows[0].id;
-          res.redirect("/moreinfo");
-        })
-        .catch(function(err) {
-          console.log(err);
-          res.render("register", {
-            layout: "main",
-            error: err
-          });
-        });
-    })
-    .catch(function(err) {
-      console.log(err);
-      res.render("register", {
-        layout: "main",
-        error: err
-      });
-    });
-});
-
+// post route for signing petition //
 app.post("/sign", function(req, res) {
-  db.createsignature(req.session.id, req.body.signaturedata)
+  db.createSignature(req.session.id, req.body.signaturedata)
     .then(function(results) {
-      return db.getsignature(req.session.id);
+      return db.getSignature(req.session.id);
     })
     .then(function(results) {
       req.session.signed = true;
@@ -216,8 +226,9 @@ app.post("/sign", function(req, res) {
     });
 });
 
+// adds more personal info to user data //
 app.post("/moreinfo", function(req, res) {
-  db.insertinfo(req.session.id, req.body.age, req.body.city, req.body.url)
+  db.insertInfo(req.session.id, req.body.age, req.body.city, req.body.url)
     .then(function() {
       res.redirect("/sign");
     })
@@ -229,8 +240,9 @@ app.post("/moreinfo", function(req, res) {
     });
 });
 
+// deletes signature //
 app.post("/signaturedelete", function(req, res) {
-  db.deletesignature(req.session.id)
+  db.deleteSignature(req.session.id)
     .then(function() {
       console.log("deleted");
       req.session.signed = false;
@@ -247,10 +259,11 @@ app.post("/signaturedelete", function(req, res) {
     });
 });
 
+// edits basic user info with or without password //
 app.post("/edit", function(req, res) {
   if (req.body.password) {
     db.hashPassword(req.body.password).then(function(password) {
-      db.updateusersdata(
+      db.updateUsersdata(
         req.body.firstname,
         req.body.lastname,
         req.body.email,
@@ -259,7 +272,7 @@ app.post("/edit", function(req, res) {
       );
     });
   } else {
-    db.updateusersdata(
+    db.updateUsersdata(
       req.body.firstname,
       req.body.lastname,
       req.body.email,
@@ -267,8 +280,8 @@ app.post("/edit", function(req, res) {
       req.session.id
     );
   }
-
-  db.updatefullinfo(req.body.age, req.body.city, req.body.url, req.session.id)
+  /// updates additional user data (age,city,url) ///
+  db.updateFullInfo(req.body.age, req.body.city, req.body.url, req.session.id)
     .then(res.redirect("/thanks"))
     .catch(function(err) {
       res.render("edit", {
