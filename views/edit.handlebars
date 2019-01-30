@@ -1,5 +1,6 @@
 <h1>edit your profile</h1>
-<form method="POST" id ="petitionbox">
+<div class="inputbox">
+<form method="POST">
   <p>first name:</p>
   <input type="text" name="firstname" class="editbox" placeholder="enter your first name" value={{info.name}}>
     <p>last name:</p>
@@ -18,6 +19,7 @@
 <button type="submit" class="button">EDIT PROFILE</button>
 </form>
     <a href="/signed">go back</a>
+  </div>
 
 {{#if error}}
   <div id="errorbox"><p>CORRECT YOUR DATA</p></div>

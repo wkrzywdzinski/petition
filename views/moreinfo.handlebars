@@ -1,16 +1,21 @@
-<h1>let's legalize medical catnip!</h1>
+<h1>free painting lessons for everyone!</h1>
 <h2>tell us more about yourself</h2>
-<form method="POST" id ="petitionbox">
-  <input type="text" name="age" placeholder="enter your age">
-  <input type="text" name="city" placeholder="enter your city">
-  <input type="url" name="url" placeholder="enter your url with https://" value="https://">
- <input type="hidden" name="_csrf" value="{{csrfToken}}">
-  <button type="submit" class="button">send the data</button>
-</form>
-<a href="/sign">OR skip the step</a>
+<div class="inputbox">
+  <form method="POST">
+    <input type="text" name="age" placeholder="enter your age">
+    <input type="text" name="city" placeholder="enter your city">
+    <input type="url" name="url" placeholder="enter your url with https://" value="https://">
+    <input type="hidden" name="_csrf" value="{{csrfToken}}">
+    <button type="submit" class="button">send the data</button>
+  </form>
+  <a href="/sign">OR skip the step</a>
+</div>
 {{#if error}}
-  <div id="errorbox"><p>///ERROR/// NOT ENOUGH DATA ///ERROR///</p></div>
+  <div id="errorbox">
+    <p>///ERROR/// NOT ENOUGH DATA ///ERROR///</p>
+  </div>
 {{/if}}
 <script src="https://code.jquery.com/jquery-3.3.1.min.js"></script>
 <script src="script.js" charset="utf-8"></script>
+
 </html>
