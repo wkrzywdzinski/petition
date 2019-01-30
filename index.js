@@ -155,18 +155,10 @@ app.post("/register", function(req, res) {
         req.body.lastname,
         req.body.email,
         password
-      )
-        .then(function(results) {
-          req.session.id = results.rows[0].id;
-          res.redirect("/moreinfo");
-        })
-        .catch(function(err) {
-          console.log(err);
-          res.render("register", {
-            layout: "main",
-            error: err
-          });
-        });
+      ).then(function(results) {
+        req.session.id = results.rows[0].id;
+        res.redirect("/moreinfo");
+      });
     })
     .catch(function(err) {
       console.log(err);
@@ -194,13 +186,10 @@ app.post("/login", function(req, res) {
                 res.redirect("/sign");
               }
             });
-          } else {
-            throw err;
           }
         });
     })
     .catch(function(err) {
-      console.log(err);
       res.render("login", {
         layout: "main",
         error: err
@@ -219,7 +208,6 @@ app.post("/sign", function(req, res) {
       res.redirect("/thanks");
     })
     .catch(function(err) {
-      console.log(err);
       res.render("sign", {
         layout: "main",
         error: err

@@ -1,6 +1,5 @@
 const spicedPg = require("spiced-pg");
 var bcrypt = require("bcryptjs");
-var bcrypt = require("bcryptjs");
 const db = spicedPg(
   process.env.DATABASE_URL ||
     `postgres:postgres:anneanneanne@localhost:5432/petition`
