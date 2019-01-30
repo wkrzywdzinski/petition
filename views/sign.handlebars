@@ -1,16 +1,19 @@
-<h1>let's legalize medical catnip!</h1>
+<h1>free painting lessons for everyone!</h1>
 <h2>sign the petition</h2>
 <div id="petitionbox">
-<form method="POST">
-  <input id="hiddenbox" type="hidden" name="signaturedata">
- <input type="hidden" name="_csrf" value="{{csrfToken}}">
-<canvas id="signaturebox"></canvas></br>
-  <button type="submit" class="button">SIGN THE PETITION</button>
-</form>
+  <form method="POST">
+    <input id="hiddenbox" type="hidden" name="signaturedata">
+    <input type="hidden" name="_csrf" value="{{csrfToken}}">
+    <canvas id="signaturebox"></canvas></br>
+    <button type="submit" class="button">SIGN THE PETITION</button>
+  </form>
 </div>
 {{#if error}}
-  <div id="errorbox"><p>///ERROR/// NOT ENOUGH DATA ///ERROR///</p></div>
+  <div id="errorbox">
+    <p>///ERROR/// NOT ENOUGH DATA ///ERROR///</p>
+  </div>
 {{/if}}
 <script src="https://code.jquery.com/jquery-3.3.1.min.js"></script>
 <script src="/canvasscript.js"></script>
+
 </html>

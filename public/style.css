@@ -12,30 +12,17 @@ body {
 .inputbox {
   position: absolute;
   left: 50%;
-  top: 30%;
+  margin-top: 3vh;
   transform: translateX(-50%);
   display: flex;
   flex-direction: column;
   align-items: center;
 }
 
-#signaturebox {
-  background-color: #ad8d88;
-  border: 2px white dashed;
-  margin: 10vh;
-}
-
-#signatureshowbox {
-  width: 70vw;
-  max-width: 400px;
-  margin-top: 30px;
-  margin-bottom: 30px;
-}
-
 input {
   transition: 1s;
   border: 0;
-  width: 50vw;
+  width: 55vw;
   height: 10vh;
   text-align: center;
   background-color: #ad8d88;
@@ -53,8 +40,44 @@ input {
   font-size: 40px;
 }
 
+.selected {
+  transition: 2s;
+  height: 13vh;
+  background-color: white;
+  color: black;
+  border: 1px black solid;
+}
+
 .selected::-webkit-input-placeholder {
   color: black;
+}
+
+.button {
+  width: 55vw;
+  background: #ad88a1;
+  margin-top: 20px;
+  margin-left: 10px;
+  margin-bottom: 20px;
+  font-weight: bold;
+  font-size: 40px;
+}
+
+.button:hover {
+  transition: 1s;
+  background: Khaki;
+}
+
+#signaturebox {
+  background-color: #ad8d88;
+  border: 2px white dashed;
+  margin: 10vh;
+}
+
+#signatureshowbox {
+  width: 70vw;
+  max-width: 400px;
+  margin-top: 30px;
+  margin-bottom: 30px;
 }
 
 h1 {
@@ -68,21 +91,6 @@ h2 {
 
 #thanks {
   font-size: 200px;
-}
-
-.button {
-  width: 50vw;
-  background: #ad88a1;
-  margin-top: 20px;
-  margin-left: 10px;
-  margin-bottom: 20px;
-  font-weight: bold;
-  font-size: 40px;
-}
-
-.button:hover {
-  transition: 1s;
-  background: Khaki;
 }
 
 #deletebutton {
@@ -151,43 +159,6 @@ p {
   font-size: 40px;
 }
 
-.editbox {
-  height: 60px;
-  font-size: 30px;
-}
-
-.selected {
-  transition: 2s;
-  height: 13vh;
-  background-color: white;
-  color: black;
-  border: 1px black solid;
-}
-
-@media screen and (max-width: 1300px) {
-  h1 {
-    font-size: 100px;
-  }
-
-  .inputbox {
-    top: 20%;
-  }
-}
-
-@media screen and (max-width: 1300px) {
-  h1 {
-    font-size: 70px;
-  }
-
-  h2 {
-    font-size: 35px;
-  }
-
-  .inputbox {
-    top: 15%;
-  }
-}
-
 @media screen and (max-width: 1010px) {
   h1 {
     font-size: 45px;
@@ -196,15 +167,11 @@ p {
   a {
     font-size: 35px;
   }
-
-  .inputbox {
-    top: 10%;
-  }
 }
 
 @media screen and (max-width: 450px) {
-  .inputbox {
-    top: 25%;
+  h2 {
+    font-size: 35px;
   }
 
   ::placeholder {

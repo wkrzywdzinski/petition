@@ -1,30 +1,33 @@
 <h1>edit your profile</h1>
 <div class="inputbox">
-<form method="POST">
-  <p>first name:</p>
-  <input type="text" name="firstname" class="editbox" placeholder="enter your first name" value={{info.name}}>
+  <form method="POST">
+    <p>first name:</p>
+    <input type="text" name="firstname" class="editbox" placeholder="enter your first name" value={{info.name}}>
     <p>last name:</p>
-  <input type="text" name="lastname" class="editbox" placeholder="enter your last name" value={{info.lastname}}>
+    <input type="text" name="lastname" class="editbox" placeholder="enter your last name" value={{info.lastname}}>
     <p>email:</p>
-  <input type="text" name="email" class="editbox" placeholder="enter email address" value={{info.email}}>
+    <input type="text" name="email" class="editbox" placeholder="enter email address" value={{info.email}}>
     <p>password:</p>
     <input type="password" name="password" class="editbox" placeholder="enter new password">
-      <p>age:</p>
+    <p>age:</p>
     <input type="text" name="age" class="editbox" placeholder="enter your age" value={{info.age}}>
     <p>city:</p>
     <input type="text" name="city" class="editbox" placeholder="enter your city" value={{info.city}}>
     <p>url:</p>
     <input type="url" name="url" class="editbox" placeholder="enter your url with https://" value={{info.url}}>
- <input type="hidden" name="_csrf" value="{{csrfToken}}">
-<button type="submit" class="button">EDIT PROFILE</button>
-</form>
-    <a href="/signed">go back</a>
-  </div>
+    <input type="hidden" name="_csrf" value="{{csrfToken}}">
+    <button type="submit" class="button">EDIT PROFILE</button>
+  </form>
+  <a href="/signed">go back</a>
+</div>
 
 {{#if error}}
-  <div id="errorbox"><p>CORRECT YOUR DATA</p></div>
+  <div id="errorbox">
+    <p>CORRECT YOUR DATA</p>
+  </div>
 
 {{/if}}
 <script src="https://code.jquery.com/jquery-3.3.1.min.js"></script>
 <script src="script.js" charset="utf-8"></script>
+
 </html>
