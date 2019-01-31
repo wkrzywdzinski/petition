@@ -9,6 +9,28 @@ body {
   background: white;
 }
 
+p {
+  font-weight: bold;
+  font-size: 40px;
+}
+
+h1 {
+  font-size: 120px;
+  text-decoration: underline;
+}
+
+h2 {
+  font-size: 60px;
+}
+
+a {
+  font-size: 60px;
+  text-decoration: none;
+  color: black;
+  font-weight: bold;
+}
+
+/* background image changing picture for each page */
 .overlay {
   position: absolute;
   left: 0;
@@ -20,6 +42,7 @@ body {
   z-index: -10;
 }
 
+/* container for every page except edit */
 .inputbox {
   position: absolute;
   left: 50%;
@@ -30,6 +53,7 @@ body {
   align-items: center;
 }
 
+/* input for every page except edit */
 .inputfield {
   transition: 1s;
   border: 0;
@@ -45,10 +69,15 @@ body {
   opacity: 0.9;
 }
 
+/* edit page styling */
+#editbox {
+  margin-top: 1vh;
+}
+
 #editbox input {
   border: 0;
   height: 5vh;
-  width: 55vw;
+  width: 35vw;
   color: white;
   font-size: 30px;
   font-weight: bold;
@@ -56,12 +85,27 @@ body {
   background-color: #5F9EA0;
 }
 
+#editbox .button {
+  width: 35vw;
+  font-size: 35px;
+}
+
+#editbox p {
+  font-size: 35px;
+}
+
+#editbox a {
+  font-size: 45px;
+}
+
+/* end of edit page styling */
 ::placeholder {
   color: white;
   font-weight: bold;
   font-size: 40px;
 }
 
+/* class applied by script after mousedown */
 .selected {
   transition: 2s;
   height: 13vh;
@@ -89,46 +133,19 @@ body {
   background: white;
 }
 
+/* container to PUT signature */
 #signaturebox {
   background-color: #5F9EA0;
   border: 2px white dashed;
   margin: 10vh;
 }
 
+/* container to SHOW signature */
 #signatureshowbox {
   width: 70vw;
   max-width: 400px;
   margin-top: 30px;
   margin-bottom: 30px;
-}
-
-h1 {
-  font-size: 120px;
-  text-decoration: underline;
-}
-
-h2 {
-  font-size: 60px;
-}
-
-#thanks {
-  font-size: 200px;
-}
-
-#deletebutton {
-  border: 0.5px solid white;
-  background: #ad88a1;
-  border-radius: 5%;
-  margin-top: 20px;
-  margin-bottom: 20px;
-  font-weight: bold;
-  font-size: 40px;
-  margin-left: 50px;
-}
-
-#deletebutton:hover {
-  transition: 1s;
-  background: Khaki;
 }
 
 #logoutbox {
@@ -138,41 +155,17 @@ h2 {
   transform: translateX(-50%);
 }
 
-img {
-  display: block;
-  margin-left: auto;
-  margin-right: auto;
-}
-
-a {
-  font-size: 60px;
-  text-decoration: none;
-  color: black;
-  font-weight: bold;
-}
-
-hr {
-  border-color: black;
-}
-
-h3 {
-  font-size: 25px;
-  text-decoration: none;
-}
-
+/* styling for the list of signers */
 ul {
   list-style-type: none;
 }
 
-li {
-  margin-top: 20px;
+hr {
+  height: 5px;
+  background-color: white;
 }
 
-p {
-  font-weight: bold;
-  font-size: 40px;
-}
-
+/* MEDIA QUERY */
 @media screen and (max-width: 1010px) {
   h1 {
     font-size: 45px;
@@ -188,11 +181,19 @@ p {
     font-size: 35px;
   }
 
+  #editbox p {
+    font-size: 30px;
+  }
+
   ::placeholder {
     font-size: 27px;
   }
 
   .button {
     font-size: 27px;
+  }
+
+  #signerslist h1 {
+    font-size: 20px;
   }
 }

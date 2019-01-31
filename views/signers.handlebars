@@ -1,16 +1,16 @@
-
-<div id="thanksbox"><h1> THANKS FOR SIGNING! </h1></div>
+<div class="overlay">
+  <img src="background8.jpg" alt="">
+</div>
+<div id="signerslist">
+<h1>PEOPLE WHO SIGNED ALREADY:</h1>
 {{#each list}}
-<div class="entry">
 {{#if url}}
 <a href={{url}}>{{name}} {{lastname}}</a>
 {{else}}
-<p>{{name}} {{lastname}} (someone has no webpage!)</p>
+<p>{{name}} {{lastname}}</p>
 {{/if}}
-</div>
-{{#if age}}<h3>(age: {{age}})</h3>{{/if}}
-{{#if city}}<a href=signers/{{city}}>{{city}}</a>{{/if}}
+{{#if city}}<p>{{city}}</p>{{/if}}
 <hr>
 {{/each}}
-<hr>
 <a href="/signed">go back</a>
+</div>
