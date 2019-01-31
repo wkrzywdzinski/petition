@@ -2,9 +2,9 @@
 <h2>log in </h2>
 <div class="inputbox">
   <form method="POST" id="petitionbox">
-    <input type="text" name="email" placeholder="enter email address">
-    <input type="password" name="password" placeholder="enter password">
-    <input type="hidden" name="_csrf" value="{{csrfToken}}">
+    <input type="text" class="inputfield" name="email" placeholder="enter email address">
+    <input type="password" class="inputfield" name="password" placeholder="enter password">
+    <input type="hidden" class="inputfield" name="_csrf" value="{{csrfToken}}">
     <button type="submit" class="button">LOG IN</button>
   </form>
   <a href="/register">or register</a>

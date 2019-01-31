@@ -1,12 +1,15 @@
+<div class="overlay">
+  <img src="background1.jpg" alt="">
+</div>
 <h1>free painting lessons for everyone!</h1>
 <h2>please register</h2>
 <div class="inputbox">
 <form method="POST">
-  <input type="text" name="firstname" placeholder="enter your first name">
-  <input type="text" name="lastname" placeholder="enter your last name">
-  <input type="text" name="email" placeholder="enter email address">
-  <input type="password" name="password" placeholder="enter password">
-  <input type="hidden" name="_csrf" value="{{csrfToken}}">
+  <input type="text" class="inputfield" name="firstname" placeholder="enter your first name">
+  <input type="text" class="inputfield" name="lastname" placeholder="enter your last name">
+  <input type="text" class="inputfield" name="email" placeholder="enter email address">
+  <input type="password" class="inputfield" name="password" placeholder="enter password">
+  <input type="hidden" class="inputfield" name="_csrf" value="{{csrfToken}}">
   <button type="submit" class="button">REGISTER
   </button>
 </form>

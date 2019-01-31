@@ -1,11 +1,14 @@
+<div class="overlay">
+  <img src="background2.jpg" alt="">
+</div>
 <h1>free painting lessons for everyone!</h1>
 <h2>tell us more about yourself</h2>
 <div class="inputbox">
   <form method="POST">
-    <input type="text" name="age" placeholder="enter your age">
-    <input type="text" name="city" placeholder="enter your city">
-    <input type="url" name="url" placeholder="enter your url with https://" value="https://">
-    <input type="hidden" name="_csrf" value="{{csrfToken}}">
+    <input type="text" class="inputfield" name="age" placeholder="enter your age">
+    <input type="text" class="inputfield" name="city" placeholder="enter your city">
+    <input type="url" class="inputfield" name="url" placeholder="enter your url with https://" value="https://">
+    <input type="hidden" class="inputfield" name="_csrf" value="{{csrfToken}}">
     <button type="submit" class="button">send the data</button>
   </form>
   <a href="/sign">OR skip the step</a>
