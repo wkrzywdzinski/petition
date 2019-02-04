@@ -3,6 +3,9 @@
 </div>
 <h1>free painting lessons for everyone!</h1>
 <h2>please register</h2>
+{{#if error}}
+<h2 id="error">WRONG EMAIL OR PASSWORD</h2>
+{{/if}}
 <div class="inputbox">
 <form method="POST">
   <input type="text" class="inputfield" name="firstname" placeholder="enter your first name">
@@ -15,9 +18,6 @@
 </form>
 <a href="/login">OR LOGIN TO EXISTING ACCOUNT</a>
 </div>
-{{#if error}}
-  <div id="errorbox"><p>PLEASE CORRECT YOUR DATA</p></div>
-{{/if}}
 <script src="https://code.jquery.com/jquery-3.3.1.min.js"></script>
 <script src="script.js" charset="utf-8"></script>
 </html>

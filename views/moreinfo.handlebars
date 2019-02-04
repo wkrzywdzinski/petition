@@ -3,6 +3,9 @@
 </div>
 <h1>free painting lessons for everyone!</h1>
 <h2>tell us more about yourself</h2>
+{{#if error}}
+    <h1 id="error">///ERROR/// NOT ENOUGH DATA ///ERROR///</h1>
+    {{/if}}
 <div class="inputbox">
   <form method="POST">
     <input type="text" class="inputfield" name="age" placeholder="enter your age">
@@ -13,11 +16,8 @@
   </form>
   <a href="/sign">OR skip the step</a>
 </div>
-{{#if error}}
-  <div id="errorbox">
-    <p>///ERROR/// NOT ENOUGH DATA ///ERROR///</p>
-  </div>
-{{/if}}
+
+
 <script src="https://code.jquery.com/jquery-3.3.1.min.js"></script>
 <script src="script.js" charset="utf-8"></script>
 

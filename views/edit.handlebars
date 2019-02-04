@@ -2,6 +2,9 @@
   <img src="background5.jpg" alt="">
 </div>
 <h2>edit your profile</h2>
+{{#if error}}
+    <h2 id="error">CORRECT YOUR DATA</h2>
+{{/if}}
 <div class="inputbox" id="editbox">
   <form method="POST">
     <p>first name:</p>
@@ -23,13 +26,6 @@
   </form>
   <a href="/signed">go back</a>
 </div>
-
-{{#if error}}
-  <div id="errorbox">
-    <p>CORRECT YOUR DATA</p>
-  </div>
-
-{{/if}}
 <script src="https://code.jquery.com/jquery-3.3.1.min.js"></script>
 <script src="script.js" charset="utf-8"></script>
 

@@ -148,25 +148,24 @@ app.get("*", function(req, res) {
 
 /// register route - hashes the password, makes database entry ///
 app.post("/register", function(req, res) {
-  db.hashPassword(req.body.password)
-    .then(function(password) {
-      db.createUser(
-        req.body.firstname,
-        req.body.lastname,
-        req.body.email,
-        password
-      ).then(function(results) {
+  db.hashPassword(req.body.password).then(function(password) {
+    db.createUser(
+      req.body.firstname,
+      req.body.lastname,
+      req.body.email,
+      password
+    )
+      .then(function(results) {
         req.session.id = results.rows[0].id;
         res.redirect("/moreinfo");
+      })
+      .catch(function(err) {
+        res.render("register", {
+          layout: "main",
+          error: err
+        });
       });
-    })
-    .catch(function(err) {
-      console.log(err);
-      res.render("register", {
-        layout: "main",
-        error: err
-      });
-    });
+  });
 });
 
 /// login route - checks if user exists and if password is correct ///
@@ -185,6 +184,11 @@ app.post("/login", function(req, res) {
               } else {
                 res.redirect("/sign");
               }
+            });
+          } else {
+            res.render("login", {
+              layout: "main",
+              error: err
             });
           }
         });
@@ -219,7 +223,6 @@ app.post("/sign", function(req, res) {
 app.post("/signaturedelete", function(req, res) {
   db.deleteSignature(req.session.id)
     .then(function() {
-      console.log("deleted");
       req.session.signed = false;
     })
     .then(function() {

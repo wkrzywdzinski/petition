@@ -30,6 +30,11 @@ a {
   font-weight: bold;
 }
 
+#error {
+  color: red;
+  background-color: black;
+}
+
 /* background image changing picture for each page */
 .overlay {
   position: absolute;
@@ -58,12 +63,12 @@ a {
   transition: 1s;
   border: 0;
   width: 55vw;
-  height: 10vh;
+  height: 6vh;
   text-align: center;
-  background-color: #5F9EA0;
+  background-color: #5f9ea0;
   color: white;
   font-weight: bold;
-  margin: 10px;
+  margin: 13px;
   font-size: 40px;
   display: block;
   opacity: 0.9;
@@ -82,7 +87,7 @@ a {
   font-size: 30px;
   font-weight: bold;
   text-align: center;
-  background-color: #5F9EA0;
+  background-color: #5f9ea0;
 }
 
 #editbox .button {
@@ -108,7 +113,7 @@ a {
 /* class applied by script after mousedown */
 .selected {
   transition: 2s;
-  height: 13vh;
+  height: 10vh;
   background-color: white;
   color: black;
   border: 1px black solid;
@@ -120,7 +125,7 @@ a {
 
 .button {
   width: 55vw;
-  background: #5F9EA0;
+  background: #5f9ea0;
   margin-top: 20px;
   margin-left: 10px;
   margin-bottom: 20px;
@@ -135,7 +140,7 @@ a {
 
 /* container to PUT signature */
 #signaturebox {
-  background-color: #5F9EA0;
+  background-color: #5f9ea0;
   border: 2px white dashed;
   margin: 10vh;
 }
@@ -194,6 +199,14 @@ hr {
   }
 
   #signerslist h1 {
-    font-size: 20px;
+    font-size: 30px;
+  }
+
+  #signerslist p {
+    font-size: 30px;
+  }
+
+  #signerslist a {
+    font-size: 30px;
   }
 }
