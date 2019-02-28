@@ -13,4 +13,4 @@ An online petition where supporters can register, log in, update profile informa
 
 ## Preview
 
-<img src="public/preview.gif">
+<img src="https://s2.gifyu.com/images/ezgif.com-video-to-gif8a024cf5c127aaee.gif">
